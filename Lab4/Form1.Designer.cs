@@ -45,6 +45,13 @@
             this.drawAllOfFindedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveImageMenuButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.anotherMethodsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cannyEdgesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.drawContoursCannyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.drawPrimitivesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.trianglesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rectanglesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.circlsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ThresholdBar = new System.Windows.Forms.TrackBar();
             this.Threshhold_tb = new System.Windows.Forms.Label();
             this.Area_tb = new System.Windows.Forms.Label();
@@ -74,6 +81,9 @@
             this.Rect_lbl = new System.Windows.Forms.Label();
             this.Circl_lbl = new System.Windows.Forms.Label();
             this.Prim_lbl = new System.Windows.Forms.Label();
+            this.ROI_Bar = new System.Windows.Forms.TrackBar();
+            this.ROI_lbl = new System.Windows.Forms.Label();
+            this.rOIToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.FirstImageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SecondImageBox)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -86,6 +96,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.MinAreaOfRectBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ColorBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HueColor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ROI_Bar)).BeginInit();
             this.SuspendLayout();
             // 
             // FirstImageBox
@@ -128,7 +139,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadImageToolStripMenuItem,
             this.FiltrMenu,
-            this.SaveImageMenuButton});
+            this.SaveImageMenuButton,
+            this.anotherMethodsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(999, 24);
@@ -157,14 +169,14 @@
             // blackWhiteBlurToolStripMenuItem1
             // 
             this.blackWhiteBlurToolStripMenuItem1.Name = "blackWhiteBlurToolStripMenuItem1";
-            this.blackWhiteBlurToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.blackWhiteBlurToolStripMenuItem1.Size = new System.Drawing.Size(168, 22);
             this.blackWhiteBlurToolStripMenuItem1.Text = "BlackWhite + Blur";
             this.blackWhiteBlurToolStripMenuItem1.Click += new System.EventHandler(this.BlackWhiteBlurToolStripMenuItem1_Click);
             // 
             // findContursToolStripMenuItem
             // 
             this.findContursToolStripMenuItem.Name = "findContursToolStripMenuItem";
-            this.findContursToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.findContursToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.findContursToolStripMenuItem.Text = "Draw Contours";
             this.findContursToolStripMenuItem.Click += new System.EventHandler(this.FindContursToolStripMenuItem_Click);
             // 
@@ -176,7 +188,7 @@
             this.drowCirclesToolStripMenuItem,
             this.drawAllOfFindedToolStripMenuItem});
             this.findPrimitivesToolStripMenuItem.Name = "findPrimitivesToolStripMenuItem";
-            this.findPrimitivesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.findPrimitivesToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.findPrimitivesToolStripMenuItem.Text = "Find Primitives";
             // 
             // drowTrianglesToolStripMenuItem
@@ -210,7 +222,7 @@
             // findColorToolStripMenuItem
             // 
             this.findColorToolStripMenuItem.Name = "findColorToolStripMenuItem";
-            this.findColorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.findColorToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.findColorToolStripMenuItem.Text = "Find Color";
             this.findColorToolStripMenuItem.Click += new System.EventHandler(this.FindColorToolStripMenuItem_Click);
             // 
@@ -221,6 +233,61 @@
             this.SaveImageMenuButton.Text = "Save Image";
             this.SaveImageMenuButton.Visible = false;
             // 
+            // anotherMethodsToolStripMenuItem
+            // 
+            this.anotherMethodsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cannyEdgesToolStripMenuItem,
+            this.drawContoursCannyToolStripMenuItem,
+            this.drawPrimitivesToolStripMenuItem,
+            this.rOIToolStripMenuItem1});
+            this.anotherMethodsToolStripMenuItem.Name = "anotherMethodsToolStripMenuItem";
+            this.anotherMethodsToolStripMenuItem.Size = new System.Drawing.Size(112, 20);
+            this.anotherMethodsToolStripMenuItem.Text = "Another Methods";
+            // 
+            // cannyEdgesToolStripMenuItem
+            // 
+            this.cannyEdgesToolStripMenuItem.Name = "cannyEdgesToolStripMenuItem";
+            this.cannyEdgesToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.cannyEdgesToolStripMenuItem.Text = "Canny Edges";
+            this.cannyEdgesToolStripMenuItem.Click += new System.EventHandler(this.CannyEdgesToolStripMenuItem_Click);
+            // 
+            // drawContoursCannyToolStripMenuItem
+            // 
+            this.drawContoursCannyToolStripMenuItem.Name = "drawContoursCannyToolStripMenuItem";
+            this.drawContoursCannyToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.drawContoursCannyToolStripMenuItem.Text = "Draw Contours(Canny)";
+            this.drawContoursCannyToolStripMenuItem.Click += new System.EventHandler(this.DrawContoursCannyToolStripMenuItem_Click);
+            // 
+            // drawPrimitivesToolStripMenuItem
+            // 
+            this.drawPrimitivesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.trianglesToolStripMenuItem,
+            this.rectanglesToolStripMenuItem,
+            this.circlsToolStripMenuItem});
+            this.drawPrimitivesToolStripMenuItem.Name = "drawPrimitivesToolStripMenuItem";
+            this.drawPrimitivesToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.drawPrimitivesToolStripMenuItem.Text = "Draw Primitives";
+            // 
+            // trianglesToolStripMenuItem
+            // 
+            this.trianglesToolStripMenuItem.Name = "trianglesToolStripMenuItem";
+            this.trianglesToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.trianglesToolStripMenuItem.Text = "Triangles";
+            this.trianglesToolStripMenuItem.Click += new System.EventHandler(this.TrianglesToolStripMenuItem_Click);
+            // 
+            // rectanglesToolStripMenuItem
+            // 
+            this.rectanglesToolStripMenuItem.Name = "rectanglesToolStripMenuItem";
+            this.rectanglesToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.rectanglesToolStripMenuItem.Text = "Rectangles";
+            this.rectanglesToolStripMenuItem.Click += new System.EventHandler(this.RectanglesToolStripMenuItem_Click);
+            // 
+            // circlsToolStripMenuItem
+            // 
+            this.circlsToolStripMenuItem.Name = "circlsToolStripMenuItem";
+            this.circlsToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.circlsToolStripMenuItem.Text = "Circls";
+            // 
             // ThresholdBar
             // 
             this.ThresholdBar.LargeChange = 1;
@@ -230,7 +297,7 @@
             this.ThresholdBar.Name = "ThresholdBar";
             this.ThresholdBar.Size = new System.Drawing.Size(82, 45);
             this.ThresholdBar.TabIndex = 7;
-            this.ThresholdBar.Value = 1;
+            this.ThresholdBar.Value = 80;
             this.ThresholdBar.Visible = false;
             this.ThresholdBar.Scroll += new System.EventHandler(this.ThresholdBar_Scroll);
             // 
@@ -239,8 +306,9 @@
             this.Threshhold_tb.AutoSize = true;
             this.Threshhold_tb.Location = new System.Drawing.Point(12, 41);
             this.Threshhold_tb.Name = "Threshhold_tb";
-            this.Threshhold_tb.Size = new System.Drawing.Size(0, 13);
+            this.Threshhold_tb.Size = new System.Drawing.Size(19, 13);
             this.Threshhold_tb.TabIndex = 8;
+            this.Threshhold_tb.Text = "80";
             this.Threshhold_tb.Visible = false;
             // 
             // Area_tb
@@ -248,8 +316,9 @@
             this.Area_tb.AutoSize = true;
             this.Area_tb.Location = new System.Drawing.Point(87, 41);
             this.Area_tb.Name = "Area_tb";
-            this.Area_tb.Size = new System.Drawing.Size(0, 13);
+            this.Area_tb.Size = new System.Drawing.Size(25, 13);
             this.Area_tb.TabIndex = 10;
+            this.Area_tb.Text = "500";
             this.Area_tb.Visible = false;
             // 
             // AreaBar
@@ -261,7 +330,7 @@
             this.AreaBar.Name = "AreaBar";
             this.AreaBar.Size = new System.Drawing.Size(109, 45);
             this.AreaBar.TabIndex = 9;
-            this.AreaBar.Value = 1;
+            this.AreaBar.Value = 500;
             this.AreaBar.Visible = false;
             this.AreaBar.Scroll += new System.EventHandler(this.AreaBar_Scroll);
             // 
@@ -270,8 +339,9 @@
             this.Dist_tb.AutoSize = true;
             this.Dist_tb.Location = new System.Drawing.Point(192, 41);
             this.Dist_tb.Name = "Dist_tb";
-            this.Dist_tb.Size = new System.Drawing.Size(0, 13);
+            this.Dist_tb.Size = new System.Drawing.Size(25, 13);
             this.Dist_tb.TabIndex = 12;
+            this.Dist_tb.Text = "250";
             this.Dist_tb.Visible = false;
             // 
             // DistBar
@@ -283,17 +353,18 @@
             this.DistBar.Name = "DistBar";
             this.DistBar.Size = new System.Drawing.Size(125, 45);
             this.DistBar.TabIndex = 11;
-            this.DistBar.Value = 1;
+            this.DistBar.Value = 250;
             this.DistBar.Visible = false;
             this.DistBar.Scroll += new System.EventHandler(this.DistBar_Scroll);
             // 
             // ThreshCircl_tb
             // 
             this.ThreshCircl_tb.AutoSize = true;
-            this.ThreshCircl_tb.Location = new System.Drawing.Point(310, 41);
+            this.ThreshCircl_tb.Location = new System.Drawing.Point(314, 41);
             this.ThreshCircl_tb.Name = "ThreshCircl_tb";
-            this.ThreshCircl_tb.Size = new System.Drawing.Size(0, 13);
+            this.ThreshCircl_tb.Size = new System.Drawing.Size(19, 13);
             this.ThreshCircl_tb.TabIndex = 14;
+            this.ThreshCircl_tb.Text = "36";
             this.ThreshCircl_tb.Visible = false;
             // 
             // ThreshCirclBar
@@ -305,7 +376,7 @@
             this.ThreshCirclBar.Name = "ThreshCirclBar";
             this.ThreshCirclBar.Size = new System.Drawing.Size(89, 45);
             this.ThreshCirclBar.TabIndex = 13;
-            this.ThreshCirclBar.Value = 1;
+            this.ThreshCirclBar.Value = 36;
             this.ThreshCirclBar.Visible = false;
             this.ThreshCirclBar.Scroll += new System.EventHandler(this.ThreshCirclBar_Scroll);
             // 
@@ -314,20 +385,21 @@
             this.MinRad_tb.AutoSize = true;
             this.MinRad_tb.Location = new System.Drawing.Point(401, 41);
             this.MinRad_tb.Name = "MinRad_tb";
-            this.MinRad_tb.Size = new System.Drawing.Size(0, 13);
+            this.MinRad_tb.Size = new System.Drawing.Size(19, 13);
             this.MinRad_tb.TabIndex = 16;
+            this.MinRad_tb.Text = "10";
             this.MinRad_tb.Visible = false;
             // 
             // MinRadBar
             // 
             this.MinRadBar.LargeChange = 1;
-            this.MinRadBar.Location = new System.Drawing.Point(404, 57);
+            this.MinRadBar.Location = new System.Drawing.Point(393, 57);
             this.MinRadBar.Maximum = 1000;
             this.MinRadBar.Minimum = 1;
             this.MinRadBar.Name = "MinRadBar";
-            this.MinRadBar.Size = new System.Drawing.Size(92, 45);
+            this.MinRadBar.Size = new System.Drawing.Size(103, 45);
             this.MinRadBar.TabIndex = 15;
-            this.MinRadBar.Value = 1;
+            this.MinRadBar.Value = 10;
             this.MinRadBar.Visible = false;
             this.MinRadBar.Scroll += new System.EventHandler(this.MinRadBar_Scroll);
             // 
@@ -336,20 +408,21 @@
             this.MaxRad_tb.AutoSize = true;
             this.MaxRad_tb.Location = new System.Drawing.Point(502, 41);
             this.MaxRad_tb.Name = "MaxRad_tb";
-            this.MaxRad_tb.Size = new System.Drawing.Size(0, 13);
+            this.MaxRad_tb.Size = new System.Drawing.Size(25, 13);
             this.MaxRad_tb.TabIndex = 18;
+            this.MaxRad_tb.Text = "300";
             this.MaxRad_tb.Visible = false;
             // 
             // MaxRadBar
             // 
             this.MaxRadBar.LargeChange = 1;
-            this.MaxRadBar.Location = new System.Drawing.Point(505, 57);
+            this.MaxRadBar.Location = new System.Drawing.Point(493, 57);
             this.MaxRadBar.Maximum = 1000;
             this.MaxRadBar.Minimum = 1;
             this.MaxRadBar.Name = "MaxRadBar";
-            this.MaxRadBar.Size = new System.Drawing.Size(95, 45);
+            this.MaxRadBar.Size = new System.Drawing.Size(107, 45);
             this.MaxRadBar.TabIndex = 17;
-            this.MaxRadBar.Value = 1;
+            this.MaxRadBar.Value = 300;
             this.MaxRadBar.Visible = false;
             this.MaxRadBar.Scroll += new System.EventHandler(this.MaxRadBar_Scroll);
             // 
@@ -358,20 +431,21 @@
             this.MinAreaOfRect_tb.AutoSize = true;
             this.MinAreaOfRect_tb.Location = new System.Drawing.Point(604, 41);
             this.MinAreaOfRect_tb.Name = "MinAreaOfRect_tb";
-            this.MinAreaOfRect_tb.Size = new System.Drawing.Size(0, 13);
+            this.MinAreaOfRect_tb.Size = new System.Drawing.Size(25, 13);
             this.MinAreaOfRect_tb.TabIndex = 20;
+            this.MinAreaOfRect_tb.Text = "300";
             this.MinAreaOfRect_tb.Visible = false;
             // 
             // MinAreaOfRectBar
             // 
             this.MinAreaOfRectBar.LargeChange = 1;
-            this.MinAreaOfRectBar.Location = new System.Drawing.Point(607, 57);
+            this.MinAreaOfRectBar.Location = new System.Drawing.Point(597, 57);
             this.MinAreaOfRectBar.Maximum = 1000;
             this.MinAreaOfRectBar.Minimum = 1;
             this.MinAreaOfRectBar.Name = "MinAreaOfRectBar";
-            this.MinAreaOfRectBar.Size = new System.Drawing.Size(84, 45);
+            this.MinAreaOfRectBar.Size = new System.Drawing.Size(94, 45);
             this.MinAreaOfRectBar.TabIndex = 19;
-            this.MinAreaOfRectBar.Value = 1;
+            this.MinAreaOfRectBar.Value = 300;
             this.MinAreaOfRectBar.Visible = false;
             this.MinAreaOfRectBar.Scroll += new System.EventHandler(this.MinAreaOfRectBar_Scroll);
             // 
@@ -531,11 +605,39 @@
             this.Prim_lbl.Text = "Primitivs";
             this.Prim_lbl.Visible = false;
             // 
+            // ROI_Bar
+            // 
+            this.ROI_Bar.Location = new System.Drawing.Point(794, 67);
+            this.ROI_Bar.Name = "ROI_Bar";
+            this.ROI_Bar.Size = new System.Drawing.Size(104, 45);
+            this.ROI_Bar.TabIndex = 35;
+            this.ROI_Bar.Visible = false;
+            this.ROI_Bar.Scroll += new System.EventHandler(this.ROI_Bar_Scroll);
+            // 
+            // ROI_lbl
+            // 
+            this.ROI_lbl.AutoSize = true;
+            this.ROI_lbl.Location = new System.Drawing.Point(791, 41);
+            this.ROI_lbl.Name = "ROI_lbl";
+            this.ROI_lbl.Size = new System.Drawing.Size(26, 13);
+            this.ROI_lbl.TabIndex = 36;
+            this.ROI_lbl.Text = "ROI";
+            this.ROI_lbl.Visible = false;
+            // 
+            // rOIToolStripMenuItem1
+            // 
+            this.rOIToolStripMenuItem1.Name = "rOIToolStripMenuItem1";
+            this.rOIToolStripMenuItem1.Size = new System.Drawing.Size(195, 22);
+            this.rOIToolStripMenuItem1.Text = "ROI";
+            this.rOIToolStripMenuItem1.Click += new System.EventHandler(this.ROIToolStripMenuItem1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(999, 507);
+            this.Controls.Add(this.ROI_lbl);
+            this.Controls.Add(this.ROI_Bar);
             this.Controls.Add(this.Prim_lbl);
             this.Controls.Add(this.Circl_lbl);
             this.Controls.Add(this.Rect_lbl);
@@ -586,6 +688,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.MinAreaOfRectBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ColorBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.HueColor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ROI_Bar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -638,6 +741,16 @@
         private System.Windows.Forms.Label Rect_lbl;
         private System.Windows.Forms.Label Circl_lbl;
         private System.Windows.Forms.Label Prim_lbl;
+        private System.Windows.Forms.ToolStripMenuItem anotherMethodsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cannyEdgesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem drawContoursCannyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem drawPrimitivesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem trianglesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rectanglesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem circlsToolStripMenuItem;
+        private System.Windows.Forms.TrackBar ROI_Bar;
+        private System.Windows.Forms.Label ROI_lbl;
+        private System.Windows.Forms.ToolStripMenuItem rOIToolStripMenuItem1;
     }
 }
 

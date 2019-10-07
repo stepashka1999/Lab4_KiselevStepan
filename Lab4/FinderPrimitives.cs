@@ -19,30 +19,6 @@ namespace Lab4
         public Image<Bgr, byte> SourseImage { get; private set; }
         public Image<Gray, byte> GrayImage { get; private set; }
 
-        private Image<Gray, byte> AreaOfInterestImage;
-
-        /*---Contours---*/
-
-        private VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint();
-        private List<VectorOfPoint> approxContour = new List<VectorOfPoint>();
-
-        /*---Primitives---*/
-
-        private List<Point[]> listOfTriangles = new List<Point[]>();
-        private List<Point[]> listOfRectangles = new List<Point[]>();
-        private List<PointF[]> listOfRectanglesF;
-        private List<CircleF> listOfCircles;
-
-        /*---Variables---*/
-
-        public int threshold = 80;
-        public int minArea = 500;
-        public int minDistance = 250;
-        public int acTreshold = 36;
-        public int minRadius = 10;
-        public int maxRadius = 300;
-        public int minAreaOfRect = 300;
-
 
         public FinderPrimitives(string FileName)
         {
@@ -55,22 +31,27 @@ namespace Lab4
             GrayImage = GrayImage.SmoothGaussian(kernelSize);
         }
 
-        public Image<Gray, byte> AreaOfInteres(int color = 255)
+        public Image<Gray, byte> AreaOfInteres(int threshold = 80, int color = 255)
         {
             //if pixel.Data[i,j,0]>treshold pixel.Data[i,j,0] = color
 
-            AreaOfInterestImage = GrayImage.Copy();
+            var areaOfInterestImage = GrayImage.Copy();
 
-            AreaOfInterestImage = AreaOfInterestImage.ThresholdBinary(new Gray(threshold), new Gray(color));
+            areaOfInterestImage = areaOfInterestImage.ThresholdBinary(new Gray(threshold), new Gray(color));
 
-            return AreaOfInterestImage;
+            return areaOfInterestImage;
+
+
         }
 
-        private VectorOfVectorOfPoint FindOfContours()
+        private VectorOfVectorOfPoint FindOfContours(int threshold = 80, int choose = 0)
         {
- 
-            CvInvoke.FindContours(AreaOfInterestImage, contours, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
+            var contours = new VectorOfVectorOfPoint();
 
+            if(choose == 0)
+            CvInvoke.FindContours(AreaOfInteres(threshold), contours, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
+            else
+                CvInvoke.FindContours(CannyCont(threshold), contours, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
             /*---Аргументы на вход
              * 1 - Бинаризованное чб изображение
              * 2 - Куда записывать Найденные контуры
@@ -81,9 +62,9 @@ namespace Lab4
             return contours;
         }
 
-        public Image<Bgr, byte> DrawContours()
+        public Image<Bgr, byte> DrawContours( int threshold = 80, int choose = 0)
         {
-            FindOfContours();
+            var contours = FindOfContours(threshold, choose );
 
             var ContoursImage = SourseImage.CopyBlank();
 
@@ -102,13 +83,16 @@ namespace Lab4
             return ContoursImage;
         }
 
-        private List<VectorOfPoint> FindPrimitives()
+        private List<VectorOfPoint> FindPrimitives(int threshold, int choose = 0)
         {
-            FindOfContours();
+            var contours = FindOfContours(threshold, choose);
+   
+            var approxContour = new List<VectorOfPoint>();
 
             for (int i = 0; i < contours.Size; i++)
             {
                 var approx = new VectorOfPoint();
+
                 CvInvoke.ApproxPolyDP(contours[i], approx, CvInvoke.ArcLength(contours[i], true) * 0.05, true);
                 /*---Данные на вход
                  * 1 - Исходный контур
@@ -121,91 +105,79 @@ namespace Lab4
             }
 
             return approxContour;
-
         }
 
-        private void FindTriangles()
+        public List<Point[]> FindTriangles(int minArea = 500, int threshold = 80, int choose = 0)
         {
-            FindPrimitives();
+            var approxContour = FindPrimitives(threshold, choose);
+
+            var listOfTriangles = new List<Point[]>();
+
             for(int i = 0; i< approxContour.Count; i++)
             if (approxContour[i].Size == 3)
             {
                 if (CvInvoke.ContourArea(approxContour[i], false) > minArea)
                     listOfTriangles.Add(approxContour[i].ToArray());
             }
+
+            return listOfTriangles;
         }
 
-        public Image<Bgr, byte> DrawPrimitives(int choose)//0 - Triangles, 1 - Rectangles, 2 - Circles, 3 - All of Finded
+        public Image<Bgr, byte> DrawPrimitives(int choose, int area = 300, int threshold = 80, int minArea = 500, int minDistance = 250, int acTreshold = 36, int minRadius = 10, int maxRadius = 300, int choose_m = 0)//0 - Triangles, 1 - Rectangles, 2 - Circles, 3 - All of Finded
         {
             var PrimitivesImage = SourseImage.CopyBlank();
+
+            var listOfRect = FindRectangles(area, threshold, choose_m);
+            var listOfTriangles = FindTriangles(minArea, threshold, choose_m);
+            var listOfCircles = HoughtAlgoritm(minDistance, acTreshold, minRadius, maxRadius);
 
             switch (choose)
             {
                 case 0:
 
-                    FindTriangles();
-
                     for (int i = 0; i < listOfTriangles.Count - 2; i++)
-                    {
                         PrimitivesImage.Draw(new Triangle2DF(listOfTriangles[i][0], listOfTriangles[i][1], listOfTriangles[i][2]), new Bgr(Color.GreenYellow), 2);
-                    }
 
                     break;
                 case 1:
-
-                    FindRectangles();
-                    PointToPointF();
-
-                    for (int i = 0; i < listOfRectangles.Count; i++)
-                    {
-                        PrimitivesImage.Draw(CvInvoke.MinAreaRect(listOfRectanglesF[i].ToArray()), new Bgr(Color.GreenYellow), 2);
-                    }
-
+                    
+                    for (int i = 0; i < listOfRect.Count; i++)
+                        PrimitivesImage.Draw(CvInvoke.MinAreaRect(listOfRect[i].ToArray()), new Bgr(Color.GreenYellow), 2);
+                    
                     break;
                 case 2:
 
-                    HoughtAlgoritm();
-
-                    foreach (CircleF circle in listOfCircles) PrimitivesImage.Draw(circle, new Bgr(Color.GreenYellow), 2);
+                    for (int i = 0; i < listOfCircles.Count; i++)
+                        PrimitivesImage.Draw(listOfCircles[i], new Bgr(Color.GreenYellow), 2);
 
                     break;
                 default:
 
-                    FindTriangles();
-                    FindRectangles();
-                    PointToPointF();
-                    HoughtAlgoritm();
-
-
-                    if (listOfTriangles.Count > 0)
+                    if (listOfTriangles.Count > 0 )
                     {
                         for (int i = 0; i < listOfTriangles.Count; i++)
-                        {
                             PrimitivesImage.Draw(new Triangle2DF(listOfTriangles[i][0], listOfTriangles[i][1], listOfTriangles[i][2]), new Bgr(Color.GreenYellow), 2);
-                        }
                     }
 
-                    if (listOfRectangles.Count > 0)
+                    if (listOfRect.Count > 0)
                     {
-                        PointToPointF();
-                        for (int i = 0; i < listOfRectangles.Count; i++)
-                        {
-                            PrimitivesImage.Draw(CvInvoke.MinAreaRect(listOfRectanglesF[i]), new Bgr(Color.GreenYellow), 2);
-                        }
+                        for (int i = 0; i < listOfRect.Count; i++)
+                            PrimitivesImage.Draw(CvInvoke.MinAreaRect(listOfRect[i]), new Bgr(Color.GreenYellow), 2);
                     }
 
-                    if (listOfCircles.Count > 0)
+                    if (listOfCircles.Count > 0 && listOfCircles != null)
                     {
-                        foreach (CircleF circle in listOfCircles) PrimitivesImage.Draw(circle, new Bgr(Color.GreenYellow), 2);
+                        for (int i = 0; i < listOfCircles.Count; i++)
+                            PrimitivesImage.Draw(listOfCircles[i], new Bgr(Color.GreenYellow), 2);
                     }
 
                     break;
             }
 
-            return PrimitivesImage;
+            return Sum(SourseImage, PrimitivesImage);
         }
 
-        private bool isRectangle(Point[] points)
+        private bool isRectangle(Point[] points, int minAreaOfRect)
         {
             int delta = 10;
 
@@ -225,40 +197,48 @@ namespace Lab4
             return true;
         }
 
-        private void FindRectangles()
+        public List<PointF[]> FindRectangles(int area = 300, int threshold = 80, int choose = 0 )
         {
-            FindPrimitives();
+            var approxContour = FindPrimitives(threshold, choose);
+            var listOfRect = new List<Point[]>();
 
             for (int i = 0; i < approxContour.Count; i++)
             {
-                if (isRectangle(approxContour[i].ToArray()))
-                   listOfRectangles.Add(approxContour[i].ToArray());
+                if (isRectangle(approxContour[i].ToArray(), area))
+                   listOfRect.Add(approxContour[i].ToArray());
+            }
 
-            } 
+            var findedRect = PointToPointF(listOfRect);
+
+            return findedRect;
         }
 
-        private void HoughtAlgoritm()
+        public List<CircleF> HoughtAlgoritm(int minDistance = 250, int acTreshold = 36, int minRadius = 10, int maxRadius = 300 )
         {
             var grayImage = SourseImage.Convert<Gray, byte>();
             var bluredImage = grayImage.SmoothGaussian(9);
 
-            listOfCircles = new List<CircleF>(CvInvoke.HoughCircles(bluredImage, HoughType.Gradient, 1.0, minDistance, 100, acTreshold, minRadius, maxRadius));
+            var listOfCircles = new List<CircleF>(CvInvoke.HoughCircles(bluredImage, HoughType.Gradient, 1.0, minDistance, 100, acTreshold, minRadius, maxRadius));
+
+            return listOfCircles;
         }
 
-        private void PointToPointF()
+        private List<PointF[]> PointToPointF(List<Point[]> point)
         {
-            listOfRectanglesF = new List<PointF[]>(listOfRectangles.Count);
-            for (int i = 0; i < listOfRectangles.Count; i++)
+            var listOfRectanglesF = new List<PointF[]>(point.Count);
+            for (int i = 0; i < point.Count; i++)
             {
-                var point = new PointF[listOfRectangles[i].Length];
+                var row = new PointF[point[i].Length];
 
-                for (int j = 0; j < listOfRectangles[i].Length; j++)
+                for (int j = 0; j < point[i].Length; j++)
                 {
-                    point[j].X = listOfRectangles[i][j].X;
-                    point[j].Y = listOfRectangles[i][j].Y;
+                    row[j].X = point[i][j].X;
+                    row[j].Y = point[i][j].Y;
                 }
-                listOfRectanglesF.Add(point);
+                listOfRectanglesF.Add(row);
             }
+
+            return listOfRectanglesF;
         }
 
         public Image<Gray, byte> FindColor(int color)
@@ -275,22 +255,47 @@ namespace Lab4
 
         }
 
-        public int GetNumberOfElement(int ch)//0-trianbles, 1 - rectangles, 2 - Circls
+        public Image<Bgr,byte> RectOfInteres(int threshold = 80, int i = 0)
         {
-            int num = 0;
-            switch(ch)
-            {
-                case 0:
-                    num = listOfTriangles.Count;
-                    break;
-                case 1:
-                    num = listOfRectangles.Count;
-                    break;
-                case 2:
-                    num = listOfCircles.Count;
-                    break;
-            }
-            return num;
+            var primitives = FindPrimitives(threshold);
+            var image = SourseImage.Copy();
+
+            Rectangle rect = CvInvoke.BoundingRectangle(primitives[i]);
+            image.ROI = rect;
+
+            return image;
         }
+
+        private Image<Bgr, byte> Sum(Image<Bgr,byte> img1, Image<Bgr, byte> img2)
+        {
+            img2.Resize(img1.Width, img1.Height, Inter.Linear);
+
+            var res = img1.Copy();
+           
+            for(int y = 0; y< res.Height; y++)
+                for(int x = 0; x < res.Width; x++)
+                {
+                    for(int ch = 0; ch < 3; ch++)
+                    if(img2.Data[y, x, ch] > 0) res.Data[y, x, ch] = img2.Data[y, x, ch];
+                }
+
+            return res;
+        }
+
+        public int GetNumOfPrimitives(int threshold = 80)
+        {
+            return FindPrimitives(threshold).Count;
+        }
+
+        /*---Modified Methods*/
+
+        public Image<Gray, byte> CannyCont(int threshold = 80)
+        {
+            var cannyEdges = GrayImage.Canny(threshold, threshold);
+
+            return cannyEdges;
+        }
+
+
     }
 }
