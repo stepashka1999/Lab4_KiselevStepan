@@ -250,5 +250,30 @@ namespace Lab4
             ROI_lbl.Text = $"ROI: {ROI_Bar.Value}";
             SecondImageBox.Image = Finder.RectOfInteres(ThresholdBar.Value, ROI_Bar.Value).Resize(SecondImageBox.Width, SecondImageBox.Height, Inter.Linear);
         }
+
+        private void ShowPrimitivesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var primitives = Finder.FindPrimitives(ThresholdBar.Value);
+
+            Area_cb.Visible = !Area_cb.Visible;
+            Primitives_ComboBox.Visible = !Primitives_ComboBox.Visible;
+
+            for (int i = 0; i < primitives.Count; i++)
+            { 
+                if (CvInvoke.ContourArea(primitives[i]) > 500.0)
+                {
+                    Primitives_ComboBox.Items.Add(i);
+                }
+            }
+        }
+
+        private void Primitives_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var primitives = Finder.FindPrimitives(ThresholdBar.Value);
+
+            SecondImageBox.Image = Finder.DrowSelectedPrimitives((int)Primitives_ComboBox.SelectedItem, ThresholdBar.Value).Resize(SecondImageBox.Width, SecondImageBox.Height, Inter.Linear);
+            Area_cb.Text = $"Area: {CvInvoke.ContourArea(primitives[(int)Primitives_ComboBox.SelectedItem])}";
+        }
+
     }
 }

@@ -41,7 +41,6 @@ namespace Lab4
 
             return areaOfInterestImage;
 
-
         }
 
         private VectorOfVectorOfPoint FindOfContours(int threshold = 80, int choose = 0)
@@ -53,12 +52,14 @@ namespace Lab4
             else
                 CvInvoke.FindContours(CannyCont(threshold), contours, null, RetrType.List, ChainApproxMethod.ChainApproxSimple);
             /*---Аргументы на вход
+             * 
              * 1 - Бинаризованное чб изображение
              * 2 - Куда записывать Найденные контуры
              * объект для хранения иерархии контуров (в данном случае не используется)
              * структура возвращаемых данных
              * методика апроксимации (сжимает горизонтальные, вертикальные и диагональные сегменты и оставляет только их конечные точки)
-            */
+             *
+             */
             return contours;
         }
 
@@ -70,20 +71,13 @@ namespace Lab4
 
             for (int i = 0; i < contours.Size; i++)
             {
-                Point[] points = new Point[contours[i].ToArray().Length];
-
-                for(int j = 0; j < contours[i].ToArray().Length; j++)
-                {
-                    points[j] = Point.Round(contours[i].ToArray()[j]);
-                }
-
-                ContoursImage.Draw(points, new Bgr(Color.GreenYellow), 2); // 1 - массив точек, 2 - цвет, 3 - толщина
+                ContoursImage.Draw(contours[i].ToArray(), new Bgr(Color.GreenYellow), 2); // 1 - массив точек, 2 - цвет, 3 - толщина
             }
 
             return ContoursImage;
         }
 
-        private List<VectorOfPoint> FindPrimitives(int threshold, int choose = 0)
+        public List<VectorOfPoint> FindPrimitives(int threshold, int choose = 0)
         {
             var contours = FindOfContours(threshold, choose);
    
@@ -177,6 +171,23 @@ namespace Lab4
             return Sum(SourseImage, PrimitivesImage);
         }
 
+         public Image<Bgr,byte> DrowSelectedPrimitives(int index, int threshold = 80)
+         {
+            var primitives = FindPrimitives(threshold);;
+
+            var primitivesImage = SourseImage.CopyBlank();
+
+            for(int i = 0; i < primitives[index].ToArray().Length; i++)
+                primitivesImage.Draw(primitives[index].ToArray(), new Bgr(Color.Red), 3);
+
+            var result = SourseImage.Copy();
+
+            result = Sum(result, primitivesImage);
+
+            return result;
+         }
+
+
         private bool isRectangle(Point[] points, int minAreaOfRect)
         {
             int delta = 10;
@@ -189,7 +200,7 @@ namespace Lab4
             {
                 double andle = Math.Abs(edges[(i + 1) % edges.Length].GetExteriorAngleDegree(edges[i]));
 
-                if (andle < 90 - delta || andle > 90 + delta || CvInvoke.ContourArea(arr, false)<minAreaOfRect)
+                if (andle < 90 - delta || andle > 90 + delta || CvInvoke.ContourArea(arr, false) < minAreaOfRect)
                 {
                     return false;
                 }

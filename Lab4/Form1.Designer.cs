@@ -44,6 +44,7 @@
             this.drowCirclesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.drawAllOfFindedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showPrimitivesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveImageMenuButton = new System.Windows.Forms.ToolStripMenuItem();
             this.anotherMethodsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cannyEdgesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,6 +53,7 @@
             this.trianglesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rectanglesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.circlsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rOIToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.ThresholdBar = new System.Windows.Forms.TrackBar();
             this.Threshhold_tb = new System.Windows.Forms.Label();
             this.Area_tb = new System.Windows.Forms.Label();
@@ -83,7 +85,8 @@
             this.Prim_lbl = new System.Windows.Forms.Label();
             this.ROI_Bar = new System.Windows.Forms.TrackBar();
             this.ROI_lbl = new System.Windows.Forms.Label();
-            this.rOIToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.Primitives_ComboBox = new System.Windows.Forms.ComboBox();
+            this.Area_cb = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.FirstImageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SecondImageBox)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -160,7 +163,8 @@
             this.blackWhiteBlurToolStripMenuItem1,
             this.findContursToolStripMenuItem,
             this.findPrimitivesToolStripMenuItem,
-            this.findColorToolStripMenuItem});
+            this.findColorToolStripMenuItem,
+            this.showPrimitivesToolStripMenuItem});
             this.FiltrMenu.Name = "FiltrMenu";
             this.FiltrMenu.Size = new System.Drawing.Size(39, 20);
             this.FiltrMenu.Text = "Filtr";
@@ -226,6 +230,13 @@
             this.findColorToolStripMenuItem.Text = "Find Color";
             this.findColorToolStripMenuItem.Click += new System.EventHandler(this.FindColorToolStripMenuItem_Click);
             // 
+            // showPrimitivesToolStripMenuItem
+            // 
+            this.showPrimitivesToolStripMenuItem.Name = "showPrimitivesToolStripMenuItem";
+            this.showPrimitivesToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.showPrimitivesToolStripMenuItem.Text = "ShowPrimitives";
+            this.showPrimitivesToolStripMenuItem.Click += new System.EventHandler(this.ShowPrimitivesToolStripMenuItem_Click);
+            // 
             // SaveImageMenuButton
             // 
             this.SaveImageMenuButton.Name = "SaveImageMenuButton";
@@ -287,6 +298,13 @@
             this.circlsToolStripMenuItem.Name = "circlsToolStripMenuItem";
             this.circlsToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.circlsToolStripMenuItem.Text = "Circls";
+            // 
+            // rOIToolStripMenuItem1
+            // 
+            this.rOIToolStripMenuItem1.Name = "rOIToolStripMenuItem1";
+            this.rOIToolStripMenuItem1.Size = new System.Drawing.Size(195, 22);
+            this.rOIToolStripMenuItem1.Text = "ROI";
+            this.rOIToolStripMenuItem1.Click += new System.EventHandler(this.ROIToolStripMenuItem1_Click);
             // 
             // ThresholdBar
             // 
@@ -624,18 +642,33 @@
             this.ROI_lbl.Text = "ROI";
             this.ROI_lbl.Visible = false;
             // 
-            // rOIToolStripMenuItem1
+            // Primitives_ComboBox
             // 
-            this.rOIToolStripMenuItem1.Name = "rOIToolStripMenuItem1";
-            this.rOIToolStripMenuItem1.Size = new System.Drawing.Size(195, 22);
-            this.rOIToolStripMenuItem1.Text = "ROI";
-            this.rOIToolStripMenuItem1.Click += new System.EventHandler(this.ROIToolStripMenuItem1_Click);
+            this.Primitives_ComboBox.FormattingEnabled = true;
+            this.Primitives_ComboBox.Location = new System.Drawing.Point(864, 43);
+            this.Primitives_ComboBox.Name = "Primitives_ComboBox";
+            this.Primitives_ComboBox.Size = new System.Drawing.Size(121, 21);
+            this.Primitives_ComboBox.TabIndex = 37;
+            this.Primitives_ComboBox.Visible = false;
+            this.Primitives_ComboBox.SelectedIndexChanged += new System.EventHandler(this.Primitives_ComboBox_SelectedIndexChanged);
+            // 
+            // Area_cb
+            // 
+            this.Area_cb.AutoSize = true;
+            this.Area_cb.Location = new System.Drawing.Point(861, 76);
+            this.Area_cb.Name = "Area_cb";
+            this.Area_cb.Size = new System.Drawing.Size(35, 13);
+            this.Area_cb.TabIndex = 38;
+            this.Area_cb.Text = "Area: ";
+            this.Area_cb.Visible = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(999, 507);
+            this.Controls.Add(this.Area_cb);
+            this.Controls.Add(this.Primitives_ComboBox);
             this.Controls.Add(this.ROI_lbl);
             this.Controls.Add(this.ROI_Bar);
             this.Controls.Add(this.Prim_lbl);
@@ -751,6 +784,9 @@
         private System.Windows.Forms.TrackBar ROI_Bar;
         private System.Windows.Forms.Label ROI_lbl;
         private System.Windows.Forms.ToolStripMenuItem rOIToolStripMenuItem1;
+        private System.Windows.Forms.ComboBox Primitives_ComboBox;
+        private System.Windows.Forms.ToolStripMenuItem showPrimitivesToolStripMenuItem;
+        private System.Windows.Forms.Label Area_cb;
     }
 }
 
